@@ -6,7 +6,7 @@
 /*   By: facarval <facarval@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 11:06:45 by facarval          #+#    #+#             */
-/*   Updated: 2024/06/04 14:15:26 by facarval         ###   ########.fr       */
+/*   Updated: 2024/06/04 14:27:32 by facarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ bool is_valid_char(char c)
 
 void Rpn::do_op(std::string::iterator it)
 {
-    std::list<long>::iterator it_stack = this->stack.end();
+    std::list<double>::iterator it_stack = this->stack.end();
     it_stack--;
-    long tmp = *it_stack;
+    double tmp = *it_stack;
     it_stack--;
 
     if (*it == '+')
@@ -81,7 +81,7 @@ void Rpn::do_op(std::string::iterator it)
     return;
 }
 
-void Rpn::calculate()
+bool Rpn::calculate()
 {
 
     for (std::string::iterator it = this->line.begin(); it != this->line.end(); it++)
@@ -95,7 +95,7 @@ void Rpn::calculate()
             if (this->stack.size() < 2)
             {
                 std::cerr << red << "Error" << reset << std::endl;
-                return;
+                return true;
             }
             else
             {
@@ -105,7 +105,7 @@ void Rpn::calculate()
         else
         {
             std::cerr << red << "Error" << reset << std::endl;
-            return;
+            return true;
         }
         it++;
         if (it == this->line.end())
@@ -113,10 +113,10 @@ void Rpn::calculate()
         else if (isspace(*it) == false)
         {
             std::cerr << red << "Error" << reset << std::endl;
-            return;
+            return true;
         }
     }
-    return;
+    return false;
 }
 
 void Rpn::run(char *line)
@@ -126,14 +126,16 @@ void Rpn::run(char *line)
     if (this->parsing_error() == true)
         return;
 
-    this->calculate();
+    if (this->calculate() == true)
+        return;
 
     if (this->stack.size() != 1)
     {
         std::cerr << red << "Error" << reset << std::endl;
-        return;
     }
-
-    std::cout << this->stack.front() << std::endl;
+    else
+    {
+        std::cout << this->stack.front() << std::endl;
+    }
     return;
 }

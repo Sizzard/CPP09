@@ -6,7 +6,7 @@
 /*   By: facarval <facarval@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 11:06:32 by facarval          #+#    #+#             */
-/*   Updated: 2024/06/04 12:56:33 by facarval         ###   ########.fr       */
+/*   Updated: 2024/06/04 14:27:39 by facarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ class Rpn
 {
 private:
     std::string line;
-    std::list<long> stack;
+    std::list<double> stack;
 
     bool parsing_error();
-    void calculate();
+    bool calculate();
     void do_op(std::string::iterator it);
 
 public:
