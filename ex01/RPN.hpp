@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   BitcoinExchange.hpp                                :+:      :+:    :+:   */
+/*   RPN.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: facarval <facarval@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/30 09:59:35 by facarval          #+#    #+#             */
-/*   Updated: 2024/06/04 11:31:17 by facarval         ###   ########.fr       */
+/*   Created: 2024/06/04 11:06:32 by facarval          #+#    #+#             */
+/*   Updated: 2024/06/04 12:56:33 by facarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,7 @@
 
 #include <iostream>
 #include <string>
-#include <fstream>
-#include <string>
-#include <cstring>
-#include <sstream>
-#include <sys/stat.h>
-#include <cstdlib>
-#include <time.h>
-#include <map>
+#include <list>
 
 const std::string red("\033[1;31m");
 const std::string green("\033[1;32m");
@@ -31,23 +24,21 @@ const std::string cyan("\033[1;36m");
 const std::string magenta("\033[1;35m");
 const std::string reset("\033[0m");
 
-class BitcoinExchange
+class Rpn
 {
 private:
-    std::map<std::string, float> db_map;
+    std::string line;
+    std::list<long> stack;
 
-    bool input_error(char *av, std::fstream &db, std::fstream &input);
-    void db_to_db_map(std::fstream &db);
-    int detect_type(std::string const &str);
-    bool line_error(std::string const &line);
-    void ft_compare(std::string const &line);
-    void parsing(std::fstream &input);
+    bool parsing_error();
+    void calculate();
+    void do_op(std::string::iterator it);
 
 public:
-    BitcoinExchange();
-    BitcoinExchange(BitcoinExchange const &to_cpy);
-    BitcoinExchange &operator=(BitcoinExchange const &cpy);
-    ~BitcoinExchange();
+    Rpn();
+    Rpn(Rpn const &to_cpy);
+    Rpn &operator=(Rpn const &cpy);
+    ~Rpn();
 
-    void run(char *infile);
+    void run(char *line);
 };
