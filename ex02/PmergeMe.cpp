@@ -6,7 +6,7 @@
 /*   By: facarval <facarval@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:36:38 by facarval          #+#    #+#             */
-/*   Updated: 2024/06/06 17:43:16 by facarval         ###   ########.fr       */
+/*   Updated: 2024/06/06 17:43:51 by facarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,10 +216,10 @@ template <class T>
 int binarySearchInsert(T const & v, int value, std::vector<int> const &jacob)
 {
     int n = v.size();
-    int low = 0;
-    int high = n - 1;
     int jcb = jacob.size();
+    int low = 0;
     int mid = 0;
+    int high = n - 1;
 
     while(low <= high)
     {
