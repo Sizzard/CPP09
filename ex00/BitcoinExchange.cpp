@@ -6,7 +6,7 @@
 /*   By: facarval <facarval@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 09:59:22 by facarval          #+#    #+#             */
-/*   Updated: 2024/06/04 11:31:06 by facarval         ###   ########.fr       */
+/*   Updated: 2024/06/06 13:20:03 by facarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,14 @@ bool BitcoinExchange::line_error(std::string const &line)
         std::cout << red << "Error: --> " << line << " :Number must be between 0 and 1000" << reset << std::endl;
         return true;
     }
+    
+    int calendar[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    
+    if (calendar[tm_mon - 1] < tm_mday)
+    {
+        std::cout << red << "Error: --> " << line << " :Invalid date" << reset << std::endl;
+        return true;
+    } 
 
     return false;
 }
