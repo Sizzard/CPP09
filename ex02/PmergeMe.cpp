@@ -6,7 +6,7 @@
 /*   By: facarval <facarval@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:36:38 by facarval          #+#    #+#             */
-/*   Updated: 2024/06/06 13:11:10 by facarval         ###   ########.fr       */
+/*   Updated: 2024/06/06 17:43:16 by facarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,39 +213,47 @@ std::vector<int> generateJacobsthal(int n)
 }
 
 template <class T>
-int binarySearchInsert(T &vec, int value)
+int binarySearchInsert(T const & v, int value, std::vector<int> const &jacob)
 {
+    int n = v.size();
     int low = 0;
-    int high = vec.size();
-    while (low < high) {
-        int mid = (low + high) / 2;
-        if (vec[mid] < value) {
+    int high = n - 1;
+    int jcb = jacob.size();
+    int mid = 0;
+
+    while(low <= high)
+    {
+        jcb--;
+        if(jacob_idx < 0)
+            mid = low;
+        else
+            mid = low + jacob[jcb];
+        if (mid >= n)
+            mid = n - 1;
+        if (v[mid] == value)
+            return (mid);
+        else if(v[mid] < value)
             low = mid + 1;
-        } else {
-            high = mid;
-        }
+        else
+            high = mid - 1;
     }
-    return low;
+    return(low);
 }
 
 template <class T>
-void insertInOrder(T &vec, int value) 
+void insertInOrder(T& vec, int value, const std::vector<int>& jacob) 
 {
-    int pos = binarySearchInsert(vec, value);
+    int pos = binarySearchInsert(vec, value, jacob);
     vec.insert(vec.begin() + pos, value);
 }
 
-template<class T, class T_P>
-void fordJohnsonSort(T &vec, T_P const &vec_pair) 
+template <class T, class T_P>
+void fordJohnsonSort(T& vec, const T_P& vec_pair, const std::vector<int>& jacob) 
 {
-    std::vector<int> jacobsthal = generateJacobsthal(vec.size());
-    
     vec.clear();
     place_all_greater(vec, vec_pair);
-    
-    for (size_t i = 0; i < vec_pair.size(); ++i) {
-        int value = vec_pair[i].first; 
-        insertInOrder(vec, value);
+    for (typename T_P::const_iterator it = vec_pair.begin(); it != vec_pair.end(); ++it) {
+        insertInOrder(vec, it->first, jacob);
     }
 }
 
@@ -253,17 +261,17 @@ template <class T>
 void print_container(T cont, bool before)
 {
     if (before == 1)
-        std::cout << magenta << "Before : " << reset;
+        std::cout << magenta << "Before : ";
     else
-        std::cout << green << "After : " << reset;
+        std::cout << green << "After : ";
     for(typename T::const_iterator it = cont.begin(); it != cont.end(); it++)
         std::cout << *it << " ";
-    std::cout << std::endl;
+    std::cout << reset << std::endl;
     
 }
 
 template <class T,class T_P>
-void FJMI(T &vec, T_P &vec_pair)
+void FJMI(T &vec, T_P &vec_pair, std::vector<int> const &jacob)
 {    
     bool isOdd = vec.size() % 2;
     int lastOdd;
@@ -279,10 +287,10 @@ void FJMI(T &vec, T_P &vec_pair)
     
     sort_vec_pairs(vec_pair);
 
-    fordJohnsonSort(vec, vec_pair);
+    fordJohnsonSort(vec, vec_pair, jacob);
     
     if (isOdd)
-        insertInOrder(vec, lastOdd);
+        insertInOrder(vec, lastOdd, jacob);
 
     return ;
 }
@@ -303,7 +311,7 @@ void PmergeMe::run(int ac, char **av)
     
     vector_pair vec_pair;
     deque_pair deq_pair;
-    
+    std::vector<int> const jacob = generateJacobsthal(1431655765);
     
     print_container(this->vector, 1);
     
@@ -311,7 +319,7 @@ void PmergeMe::run(int ac, char **av)
 
     start = clock();
     
-    FJMI(this->vector, vec_pair);
+    FJMI(this->vector, vec_pair, jacob);
     
     end = clock();
     
@@ -321,7 +329,7 @@ void PmergeMe::run(int ac, char **av)
 
     start = clock();
     
-    FJMI(this->deque,deq_pair);
+    FJMI(this->deque,deq_pair, jacob);
 
     end = clock();
 
