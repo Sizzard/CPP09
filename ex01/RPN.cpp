@@ -6,7 +6,7 @@
 /*   By: facarval <facarval@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 11:06:45 by facarval          #+#    #+#             */
-/*   Updated: 2024/06/04 14:27:32 by facarval         ###   ########.fr       */
+/*   Updated: 2024/06/04 14:37:41 by facarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ Rpn::Rpn(Rpn const &cpy)
 
 Rpn &Rpn::operator=(Rpn const &cpy)
 {
-    (void)cpy;
-    // Copy what you want : this->name = cpy.name
+    this->line = cpy.line;
+    this->stack = cpy.stack;
     return *this;
 }
 

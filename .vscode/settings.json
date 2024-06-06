@@ -53,6 +53,8 @@
         "map": "cpp",
         "cerrno": "cpp",
         "climits": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "ctime": "cpp",
+        "iomanip": "cpp"
     }
 }
