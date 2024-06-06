@@ -6,7 +6,7 @@
 /*   By: facarval <facarval@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:36:26 by facarval          #+#    #+#             */
-/*   Updated: 2024/06/06 11:45:24 by facarval         ###   ########.fr       */
+/*   Updated: 2024/06/06 12:10:53 by facarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,6 @@ private:
     bool init_containers(int ac, char **av);
     void mergeSort(std::vector<int> &vector);
     void merge(std::vector<int> &left, std::vector<int> &right, std::vector<int> &vec);
-    void FJMI(std::vector<int> &vec);
-    int binarySearchInsert(int value);
-    void insertInOrder(int value);
-    void place_all_greater(vector_pair const &vec_pair);
-    void fordJohnsonSort(vector_pair const &vec);
 
 public:
     PmergeMe();

@@ -6,7 +6,7 @@
 /*   By: facarval <facarval@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:36:38 by facarval          #+#    #+#             */
-/*   Updated: 2024/06/06 11:52:05 by facarval         ###   ########.fr       */
+/*   Updated: 2024/06/06 13:11:10 by facarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,9 +126,10 @@ void PmergeMe::mergeSort(std::vector<int> &vec)
     return;
 }
 
-void create_pairs(std::vector<int> &vec, vector_pair &vec_pair)
+template <class T, class T_P>
+void create_pairs(T &vec, T_P &vec_pair)
 {
-    for (std::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
+    for (typename T::iterator it = vec.begin(); it != vec.end(); it++)
     {
         std::pair<int, int> pair(*it , *(++it));
         vec_pair.push_back(pair);
@@ -136,9 +137,10 @@ void create_pairs(std::vector<int> &vec, vector_pair &vec_pair)
     return ;
 }
 
-void sort_pairs(vector_pair &vec_pair)
+template <class T_P>
+void sort_pairs(T_P &vec_pair)
 {
-    for(vector_pair::iterator it = vec_pair.begin(); it != vec_pair.end(); it++)
+    for(typename T_P::iterator it = vec_pair.begin(); it != vec_pair.end(); it++)
     {
         if (it->first > it->second)
         {
@@ -148,19 +150,20 @@ void sort_pairs(vector_pair &vec_pair)
     return ;
 }
 
-void sort_vec_pairs(vector_pair &vec_pair)
+template <class T_P>
+void sort_vec_pairs(T_P &vec_pair)
 {
     if (vec_pair.size() <= 1)
         return;
-    vector_pair::iterator mid = vec_pair.begin() + (vec_pair.size() / 2);
+   typename T_P::iterator mid = vec_pair.begin() + (vec_pair.size() / 2);
     
-    vector_pair left(vec_pair.begin(), mid);
-    vector_pair right(mid, vec_pair.end());
+    T_P left(vec_pair.begin(), mid);
+    T_P right(mid, vec_pair.end());
     sort_vec_pairs(left);
     sort_vec_pairs(right);
     
-    vector_pair::iterator l = left.begin();
-    vector_pair::iterator r = right.begin();
+   typename T_P::iterator l = left.begin();
+   typename T_P::iterator r = right.begin();
     int i = 0;
     while (l != left.end() && r != right.end())
     {
@@ -186,6 +189,15 @@ void sort_vec_pairs(vector_pair &vec_pair)
     }
 }
 
+template <class T,class T_P>
+void place_all_greater(T &vec, T_P const &vec_pair)
+{
+    for(typename T_P::const_iterator it = vec_pair.begin(); it != vec_pair.end(); it++)
+    {
+        vec.push_back(it->second);
+    }
+}
+
 std::vector<int> generateJacobsthal(int n) 
 {
     std::vector<int> jacobsthal;
@@ -200,13 +212,14 @@ std::vector<int> generateJacobsthal(int n)
     return jacobsthal;
 }
 
-int PmergeMe::binarySearchInsert(int value)
+template <class T>
+int binarySearchInsert(T &vec, int value)
 {
     int low = 0;
-    int high = this->vector.size();
+    int high = vec.size();
     while (low < high) {
         int mid = (low + high) / 2;
-        if (this->vector[mid] < value) {
+        if (vec[mid] < value) {
             low = mid + 1;
         } else {
             high = mid;
@@ -215,30 +228,24 @@ int PmergeMe::binarySearchInsert(int value)
     return low;
 }
 
-void PmergeMe::insertInOrder(int value) 
+template <class T>
+void insertInOrder(T &vec, int value) 
 {
-    int pos = binarySearchInsert(value);
-    this->vector.insert(this->vector.begin() + pos, value);
+    int pos = binarySearchInsert(vec, value);
+    vec.insert(vec.begin() + pos, value);
 }
 
-void PmergeMe::fordJohnsonSort(vector_pair const &vec) 
+template<class T, class T_P>
+void fordJohnsonSort(T &vec, T_P const &vec_pair) 
 {
     std::vector<int> jacobsthal = generateJacobsthal(vec.size());
     
-    this->vector.clear();
-    place_all_greater(vec);
+    vec.clear();
+    place_all_greater(vec, vec_pair);
     
-    for (size_t i = 0; i < vec.size(); ++i) {
-        int value = vec[i].first; 
-        insertInOrder(value);
-    }
-}
-
-void PmergeMe::place_all_greater(vector_pair const &vec_pair)
-{
-    for(vector_pair::const_iterator it = vec_pair.begin(); it != vec_pair.end(); it++)
-    {
-        this->vector.push_back(it->second);
+    for (size_t i = 0; i < vec_pair.size(); ++i) {
+        int value = vec_pair[i].first; 
+        insertInOrder(vec, value);
     }
 }
 
@@ -246,18 +253,18 @@ template <class T>
 void print_container(T cont, bool before)
 {
     if (before == 1)
-        std::cout << "Before : ";
+        std::cout << magenta << "Before : " << reset;
     else
-        std::cout << "After : ";
+        std::cout << green << "After : " << reset;
     for(typename T::const_iterator it = cont.begin(); it != cont.end(); it++)
         std::cout << *it << " ";
     std::cout << std::endl;
     
 }
 
-void PmergeMe::FJMI(std::vector<int> &vec)
-{
-    vector_pair vec_pair;
+template <class T,class T_P>
+void FJMI(T &vec, T_P &vec_pair)
+{    
     bool isOdd = vec.size() % 2;
     int lastOdd;
 
@@ -267,28 +274,26 @@ void PmergeMe::FJMI(std::vector<int> &vec)
         vec.pop_back();
     }
     create_pairs(vec, vec_pair);
+    
     sort_pairs(vec_pair);
+    
     sort_vec_pairs(vec_pair);
-    fordJohnsonSort(vec_pair);
+
+    fordJohnsonSort(vec, vec_pair);
     
     if (isOdd)
-        insertInOrder(lastOdd);
+        insertInOrder(vec, lastOdd);
 
     return ;
 }
 
-void print_time(clock_t start, clock_t end)
+void print_time(clock_t start, clock_t end, std::string const &cont)
 {
     double time_taken = double(end - start) / double(CLOCKS_PER_SEC);
     
-    std::cout << "Time to process a range of 5 elements with std::vector : " << std::fixed 
+    std::cout << "Time to process a range of 5 elements with std::" << cont  << ": " << std::fixed 
          << time_taken;
     std::cout << " sec " << std::endl;
-}
-
-void vector_route()
-{
-
 }
 
 void PmergeMe::run(int ac, char **av)
@@ -296,20 +301,32 @@ void PmergeMe::run(int ac, char **av)
     if (init_containers(ac, av) == true)
         return;
     
+    vector_pair vec_pair;
+    deque_pair deq_pair;
+    
+    
     print_container(this->vector, 1);
     
     clock_t start,end;
 
     start = clock();
     
-    FJMI(this->vector);
+    FJMI(this->vector, vec_pair);
     
     end = clock();
     
     print_container(this->vector, 0);
-        
-    print_time(start, end);
     
+    print_time(start, end, "vector");
+
+    start = clock();
+    
+    FJMI(this->deque,deq_pair);
+
+    end = clock();
+
+    print_time(start, end, "deque");
+
     this->vector.clear();
     this->deque.clear();
     this->strings.clear();
