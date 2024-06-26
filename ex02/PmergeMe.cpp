@@ -6,7 +6,7 @@
 /*   By: facarval <facarval@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 14:36:38 by facarval          #+#    #+#             */
-/*   Updated: 2024/06/06 17:43:51 by facarval         ###   ########.fr       */
+/*   Updated: 2024/06/26 15:04:22 by facarval         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,7 +224,7 @@ int binarySearchInsert(T const & v, int value, std::vector<int> const &jacob)
     while(low <= high)
     {
         jcb--;
-        if(jacob_idx < 0)
+        if(jcb < 0)
             mid = low;
         else
             mid = low + jacob[jcb];
@@ -295,11 +295,11 @@ void FJMI(T &vec, T_P &vec_pair, std::vector<int> const &jacob)
     return ;
 }
 
-void print_time(clock_t start, clock_t end, std::string const &cont)
+void print_time(clock_t start, clock_t end, std::string const &cont, int size)
 {
     double time_taken = double(end - start) / double(CLOCKS_PER_SEC);
     
-    std::cout << "Time to process a range of 5 elements with std::" << cont  << ": " << std::fixed 
+    std::cout << "Time to process a range of " << size << " elements with std::" << cont  << ": " << std::fixed 
          << time_taken;
     std::cout << " sec " << std::endl;
 }
@@ -325,7 +325,7 @@ void PmergeMe::run(int ac, char **av)
     
     print_container(this->vector, 0);
     
-    print_time(start, end, "vector");
+    print_time(start, end, "vector", this->vector.size());
 
     start = clock();
     
@@ -333,8 +333,8 @@ void PmergeMe::run(int ac, char **av)
 
     end = clock();
 
-    print_time(start, end, "deque");
-
+    print_time(start, end, "deque",this->deque.size());
+    
     this->vector.clear();
     this->deque.clear();
     this->strings.clear();
